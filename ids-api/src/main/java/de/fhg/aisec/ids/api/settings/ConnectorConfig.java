@@ -49,7 +49,7 @@ public final class ConnectorConfig implements Serializable {
     acmeDnsWebcon = "";
     acmePortWebcon = 80;
     tosAcceptWebcon = false;
-    dapsUrl = "http://daps.aisec.fraunhofer.de/token";
+    dapsUrl = "https://daps.aisec.fraunhofer.de";
     keystoreName = "client-keystore.jks";
     keystorePassword = "password";
     keystoreAliasName = "1";

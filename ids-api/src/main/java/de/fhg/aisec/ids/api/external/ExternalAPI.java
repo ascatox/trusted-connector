@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Interface of an IDS connector towards the IDS network, i.e. outside of the connector itself.
  *
- * @author Julian Schütte (julian.schuette@aisec.fraunhofer.de), Gerd Brost
+ * @author Julian Schutte (julian.schuette@aisec.fraunhofer.de), Gerd Brost
  */
 public interface ExternalAPI {
 

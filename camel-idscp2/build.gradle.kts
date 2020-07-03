@@ -3,7 +3,7 @@ description = "Camel IDS Component"
 dependencies {
     @Suppress("UNCHECKED_CAST") val libraryVersions =
             rootProject.ext.get("libraryVersions") as Map<String, String>
-    
+
     providedByBundle(project(":ids-api")) { isTransitive = false }
     providedByBundle(project(":idscp2")) { isTransitive = false }
 
@@ -22,4 +22,17 @@ dependencies {
     testImplementation("junit", "junit", libraryVersions["junit4"])
     testImplementation("org.apache.camel", "camel-test", libraryVersions["camel"])
     testImplementation("org.mockito", "mockito-core", libraryVersions["mockito"])
+
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.0")
+    tasks.register<Jar>("uberJar") {
+        /*archiveClassifier.set("uber")*/
+
+        from(sourceSets.main.get().output)
+
+        dependsOn(configurations.runtimeClasspath)
+        from({
+            configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        })
+    }
 }

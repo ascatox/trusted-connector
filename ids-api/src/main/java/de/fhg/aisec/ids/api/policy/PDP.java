@@ -25,7 +25,7 @@ package de.fhg.aisec.ids.api.policy;
  * <p>The PDP decides decision requests against a policy. It may use caching to speed up the
  * decision.
  *
- * @author Julian Schütte (julian.schuette@aisec.fraunhofer.de)
+ * @author Julian Schutte (julian.schuette@aisec.fraunhofer.de)
  */
 public interface PDP {
   String LABELS_KEY = "luconLabels";

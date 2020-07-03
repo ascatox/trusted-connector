@@ -1,0 +1,74 @@
+version: '3'
+services:
+
+  # TPM simulator
+  ids-tpmsim-consumer:
+    image: fraunhoferaisec/tpmsim:${EXAMPLE_TAG:-develop}
+    volumes:
+      # Always extract a "clean state" for our TPM simulator to prevent DA lockout issues
+      - ../tpmsim/tpmsim_data.tar:/tpmsim_data.tar
+    networks:
+      - consumer-internal
+
+  # The core platform, mounts docker control socket and route definition into the image
+  ecc-consumer:
+    image: market4.0/execution_core_container_business
+    ports:
+      - 8086:8086
+      - 8888:8888
+      - 8890:8890
+      - 5005:5005
+    environment:
+      - SPRING_PROFILES_ACTIVE=CONSUMER_DOCKER
+      - TPM_HOST=ids-tpmsim-consumer
+      - MULTIPART=mixed  #Data APP endpoint multipart/mixed content type
+      - CLEARING_HOUSE=http://109.232.32.193:8280/data
+      - SSL_KEY_PASSWORD=changeit
+      - KEYSTORE_PASSWORD=password
+      - CH=false
+      - DAPS=false
+      - WSS=false
+      - IDSCP=true
+      - WSSE=false
+      - TTC_CONSUMER_HOST=ecc-consumer
+      - TTC_CONSUMER_PORT=29292
+    command: --spring.profiles.active=CONSUMER_DOCKER
+    volumes:
+      - /Users/ascatox/Documents/Sviluppo/workspace_idsa2/cert:/cert
+      - /Users/ascatox/Documents/Sviluppo/workspace_idsa2/hash:/hash
+      - ../tpmsim/rootCA.crt:/etc/rootca-cert.pem
+    # image: fraunhoferaisec/trusted-connector-core:${EXAMPLE_TAG:-develop}
+    # tty: true
+    # stdin_open: true
+    # volumes:
+    #   - ../log/:/root/log/
+    #   - /var/run/docker.sock:/var/run/docker.sock
+    #   - ./system.properties:/root/etc/system.properties
+    #   - ../tpmsim/rootCA.crt:/root/etc/rootca-cert.pem
+    #   - ../cert-stores/consumer-keystore.p12:/root/etc/consumer-keystore.p12
+    #   - ../cert-stores/truststore.p12:/root/etc/truststore.p12
+    #   - ./example-consumer-routes.xml:/root/deploy/example-consumer-routes.xml
+    # Enable this port mappings for debugging or UI access from localhost
+#    ports:
+#      - "5005:5005"
+#      - "8181:8181"
+#      - "8443:8443"
+    # Enable this port mapping (along with "ports:" above) to allow access to IDSCP from outside the ids-wide network
+#      - "9292:9292"
+    networks:
+      - ids-wide
+      - consumer-internal
+
+  # Data App (REST consumer, displays web page)
+  consumer-app:
+    image: fraunhoferaisec/example-server:${EXAMPLE_TAG:-develop}
+    ports:
+      - "8081:8081"
+    networks:
+      - consumer-internal
+
+networks:
+  ids-wide:
+    driver: bridge
+  consumer-internal:
+    driver: bridge

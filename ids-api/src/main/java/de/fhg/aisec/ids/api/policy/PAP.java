@@ -27,7 +27,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * Policy Administration Point Interface.
  *
- * @author Julian Schütte (julian.schuette@aisec.fraunhofer.de)
+ * @author Julian Schutte (julian.schuette@aisec.fraunhofer.de)
  */
 public interface PAP {
 

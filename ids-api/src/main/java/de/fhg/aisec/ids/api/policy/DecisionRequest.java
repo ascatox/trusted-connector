@@ -28,7 +28,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * Data structure holding a decision request which is sent to the PDP. The PDP is expected to answer
  * with a PolicyDecision object.
  *
- * @author Julian Schütte (julian.schuette@aisec.fraunhofer.de)
+ * @author Julian Schutte (julian.schuette@aisec.fraunhofer.de)
  */
 public class DecisionRequest {
   /** The processor that data is received from */
